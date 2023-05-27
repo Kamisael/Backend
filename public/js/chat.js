@@ -3,7 +3,8 @@ const txtMensaje = document.querySelector("#txtMensaje");
 const listarUsuarios = document.querySelector("#listar-usuarios");
 const chats = document.querySelector("#chats-body");
 const private = document.querySelector("#private");
-const btnEnviar = document.querySelector("#btnEnviar"); // Agregado: Obtener referencia al botón de enviar
+const btnEnviar = document.querySelector("#btnEnviar");
+const txtNombre = document.querySelector("#txtNombre");
 
 socket.on("usuarios-activos", (payload) => {
   let userHtml = "";
@@ -17,9 +18,10 @@ socket.on("usuarios-activos", (payload) => {
 txtMensaje.addEventListener("keyup", ({ keyCode }) => {
   const uId = txtUid.value;
   const mensaje = txtMensaje.value;
+  const nombre = txtNombre.value;
 
   const payload = {
-    from: socket.id,
+    from: nombre,
     to: uId,
     mensaje,
   };
@@ -46,17 +48,15 @@ socket.on("recibir-mensaje", (payload) => {
   }
 });
 
-// Agregado: Agregar evento de click al botón de enviar
 btnEnviar.addEventListener("click", enviarMensaje);
 
-// Agregado: Función para enviar el mensaje
-// Agregado: Función para enviar el mensaje
 function enviarMensaje() {
   const uId = txtUid.value;
+  const nombre = txtNombre.value;
   const mensaje = txtMensaje.value;
 
   const payload = {
-    from: socket.id,
+    from: nombre,
     to: uId,
     mensaje,
   };
@@ -66,12 +66,9 @@ function enviarMensaje() {
   }
 
   socket.emit("enviar-mensaje", payload);
-  
-  // Agregar el mensaje enviado al chat
-  const className = "text-end"; // El mensaje enviado siempre se mostrará alineado a la derecha
+
+  const className = "text-end";
   chats.innerHTML += `<li class="${className}"> <small> ${mensaje} </small> </li>`;
-  
-  // Limpiar campo de mensaje después de enviar
+
   txtMensaje.value = "";
 }
-
