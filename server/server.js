@@ -15,7 +15,7 @@ class Server {
     this.app.use(express.json());
     this.app.use(express.static('public'));
     this.io = require('socket.io')(this.server, {
-      cors: {origin: "http://localhost:3000"}
+      cors: {origin: "https://6476507e753658057773416c--fastidious-unicorn-d28328.netlify.app"}
   });
     // Conexión a la base de datos
     this.connectToDB();
