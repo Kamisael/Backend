@@ -1,10 +1,10 @@
 const Message = require('../models/message');
 
 const socketController = (socket, io) => {
-  let chats = []; 
+  let chats = [];
 
   chats.push(socket.id);
-  io.emit("usuarios-activos", chats);
+  io.emit("lista-usuarios", chats);
 
   console.log("Cliente Conectado", socket.id);
 
@@ -23,14 +23,18 @@ const socketController = (socket, io) => {
       const newMessage = new Message({
         from: payload.from,
         message: payload.message,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       });
-      newMessage.save()
-        .then(savedMessage => {
+      newMessage
+        .save()
+        .then((savedMessage) => {
           console.log("Mensaje guardado en la base de datos:", savedMessage);
         })
-        .catch(error => {
-          console.log("Error al guardar el mensaje en la base de datos:", error);
+        .catch((error) => {
+          console.log(
+            "Error al guardar el mensaje en la base de datos:",
+            error
+          );
         });
     } catch (error) {
       console.log("Error al guardar el mensaje en la base de datos:", error);
@@ -38,6 +42,8 @@ const socketController = (socket, io) => {
   });
 
   socket.on("enviar-mensaje", ({ to, from, mensaje }) => {
+    console.log("Mensaje recibido desde el cliente:", mensaje);
+
     if (to) socket.to(to).emit("recibir-mensaje", { to, from, mensaje });
     else io.emit("recibir-mensaje", { from, mensaje });
 
@@ -46,14 +52,18 @@ const socketController = (socket, io) => {
       const newMessage = new Message({
         from,
         message: mensaje,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       });
-      newMessage.save()
-        .then(savedMessage => {
+      newMessage
+        .save()
+        .then((savedMessage) => {
           console.log("Mensaje guardado en la base de datos:", savedMessage);
         })
-        .catch(error => {
-          console.log("Error al guardar el mensaje en la base de datos:", error);
+        .catch((error) => {
+          console.log(
+            "Error al guardar el mensaje en la base de datos:",
+            error
+          );
         });
     } catch (error) {
       console.log("Error al guardar el mensaje en la base de datos:", error);

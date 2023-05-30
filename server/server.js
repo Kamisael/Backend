@@ -14,7 +14,9 @@ class Server {
     this.app.use(cors());
     this.app.use(express.json());
     this.app.use(express.static('public'));
-    this.io = require("socket.io")(this.server, this.headers);
+    this.io = require('socket.io')(this.server, {
+      cors: {origin: "http://localhost:3000"}
+  });
     // Conexión a la base de datos
     this.connectToDB();
 

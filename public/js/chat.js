@@ -6,6 +6,7 @@ const private = document.querySelector("#private");
 const btnEnviar = document.querySelector("#btnEnviar");
 const txtNombre = document.querySelector("#txtNombre");
 
+
 socket.on("usuarios-activos", (payload) => {
   let userHtml = "";
   payload.forEach((element) => {
